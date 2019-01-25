@@ -2,6 +2,7 @@
  * Top Errors by Browser
  */
 const topBrowsers = {
+  name: 'Top Browsers',
   fields: ['browser.name'],
   conditions: [],
   aggregations: [['count()', null, 'count']],
