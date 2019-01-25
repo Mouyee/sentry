@@ -12,6 +12,7 @@ import GroupChart from 'app/components/stream/groupChart';
 import GroupStore from 'app/stores/groupStore';
 import Link from 'app/components/link';
 import ProjectLink from 'app/components/projectLink';
+import GlobalSelectionLink from 'app/components/globalSelectionLink';
 import {t} from 'app/locale';
 import {PanelItem} from 'app/components/panels';
 import SentryTypes from 'app/sentryTypes';
@@ -78,6 +79,10 @@ class CompactIssueHeader extends React.Component {
     if (data.subscriptionDetails && data.subscriptionDetails.reason === 'mentioned') {
       styles = {color: '#57be8c'};
     }
+
+    let LinkComponent = new Set(organization.features).has('sentry10')
+      ? GlobalSelectionLink
+      : ProjectLink;
     return (
       <React.Fragment>
         <Flex align="center">
@@ -85,16 +90,16 @@ class CompactIssueHeader extends React.Component {
             <span className="error-level truncate" title={data.level} />
           </Box>
           <h3 className="truncate">
-            <ProjectLink to={`${basePath}${data.id}/`}>
+            <LinkComponent to={`${basePath}${data.id}/`}>
               <span className="icon icon-soundoff" />
               <span className="icon icon-star-solid" />
               {this.getTitle()}
-            </ProjectLink>
+            </LinkComponent>
           </h3>
         </Flex>
         <div className="event-extra">
           <span className="project-name">
-            <ProjectLink to={basePath}>{data.project.slug}</ProjectLink>
+            <LinkComponent to={basePath}>{data.project.slug}</LinkComponent>
           </span>
           {data.numComments !== 0 && (
             <span>
